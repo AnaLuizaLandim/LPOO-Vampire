@@ -1,0 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package teste;
+
+import model.Estado;
+import model.Humano;
+import model.Ligacao;
+import model.dao.PersistenciaJPA;
+
+/**
+ *
+ * @author @Ana
+ */
+public class TesteHumanoPersiste {
+    public static void main(String[] args) {
+        PersistenciaJPA jpa = new PersistenciaJPA();
+
+        if (jpa.conexaoAberta()) {
+            System.out.println("✅ Conexão aberta com sucesso!");
+            
+            Humano h = new Humano();
+            h.setEstado(Estado.Morto);
+            h.setNome("Roberto");
+
+            try {
+                jpa.persist(h);
+                System.out.println("🚗 Humano salvo no banco!");
+            } catch (Exception e) {
+                System.out.println("❌ Erro ao salvar: " + e.getMessage());
+            }
+
+            jpa.fecharConexao();
+        } else {
+            System.out.println("❌ Falha ao abrir conexão.");
+        }
+    }
+}
+
