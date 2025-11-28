@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,14 +18,16 @@ import model.VampiroCriador;
  *
  * @author @Ana
  */
-public class CadastroCriadorJD extends javax.swing.JFrame {
-    
+public class CadastroCriadorJD extends javax.swing.JDialog {
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CadastroCriadorJD.class.getName());
     private VampiroCriador criador;
+
     /**
      * Creates new form CadastroCriadorJD
      */
-    public CadastroCriadorJD() {
+    public CadastroCriadorJD(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         loadEstado();
         loadCla();
@@ -48,7 +51,7 @@ public class CadastroCriadorJD extends javax.swing.JFrame {
         cmbCla = new javax.swing.JComboBox<>();
         cmbEstado = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Showcard Gothic", 0, 36)); // NOI18N
         jLabel1.setText("Cadastro de criador");
@@ -122,48 +125,61 @@ public class CadastroCriadorJD extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastarActionPerformed
-       try {
-        if (criador == null) {
-            criador = new VampiroCriador();
+        try {
+            if (criador == null) {
+                criador = new VampiroCriador();
+            }
+
+            criador.setNome(txtNome.getText());
+            criador.setEstado((Estado) cmbEstado.getSelectedItem());
+            criador.setClan((Clan) cmbCla.getSelectedItem());
+            JOptionPane.showMessageDialog(this, "Cadastrado com sucesso!");
+            this.dispose();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocorreu um erro inesperado:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-        criador.setNome(txtNome.getText());
-        criador.setEstado((Estado) cmbEstado.getSelectedItem());
-        criador.setClan((Clan) cmbCla.getSelectedItem());
-        JOptionPane.showMessageDialog(this, "Cadastrado com sucesso!");
-        this.dispose();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Ocorreu um erro inesperado:\n" + e.getMessage(),
-            "Erro",
-            JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_btnCadastarActionPerformed
+    public VampiroCriador getCriador() {
+        return criador;
+    }
 
-   private void loadEstado() {
+    private void loadEstado() {
         cmbEstado.removeAllItems();
 //        for(Modelo obj: Modelo.values()){
 //            cmbModelo.addItem(obj);
 //        }
-      cmbEstado.removeAllItems();
+        cmbEstado.removeAllItems();
 
-    List<Estado> estados = new ArrayList<>(Arrays.asList(Estado.values()));
+        List<Estado> estados = new ArrayList<>(Arrays.asList(Estado.values()));
 
-    estados.forEach(e -> cmbEstado.addItem(e));       
+        estados.forEach(e -> cmbEstado.addItem(e));
     }
-   
+
     private void loadCla() {
         cmbCla.removeAllItems();
 //        for(Modelo obj: Modelo.values()){
 //            cmbModelo.addItem(obj);
 //        }
-      cmbCla.removeAllItems();
+        cmbCla.removeAllItems();
 
-    List<Clan> estados = new ArrayList<>(Arrays.asList(Clan.values()));
+        List<Clan> estados = new ArrayList<>(Arrays.asList(Clan.values()));
 
-    estados.forEach(e -> cmbCla.addItem(e));       
+        estados.forEach(e -> cmbCla.addItem(e));
     }
+
+    public void setCriador(VampiroCriador criador) {
+        this.criador = criador;
+        txtNome.setText(criador.getNome());
+        cmbCla.setSelectedItem(criador.getClan());
+
+        cmbEstado.setSelectedItem(criador.getEstado());
+
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -183,7 +199,7 @@ public class CadastroCriadorJD extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CadastroCriadorJD().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new CadastroCriadorJD().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

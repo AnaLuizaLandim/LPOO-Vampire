@@ -23,7 +23,7 @@ public class Vampiro {
     
     @Enumerated(EnumType.STRING)
     @Column(name = "clan")
-    private Clan clan;
+    Clan clan;
 
     public String getNome() {
         return nome;
@@ -32,7 +32,7 @@ public class Vampiro {
     public Clan getClan() {
         return clan;
     }
-
+    
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -47,7 +47,7 @@ public class Vampiro {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String aux = "Vampiro cadastrada: \n";
         aux += "Nome: " + nome+ "\n";
-    
+        aux += "Clã: " + clan +"\n";
         return aux;
     }
             

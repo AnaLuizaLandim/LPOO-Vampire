@@ -5,6 +5,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +45,9 @@ public class VampiroCriador extends Vampiro implements Serializable {
         this.estado = estado;
     }
 
-   
+   public void setClan(Clan clan) {
+        this.clan = clan;
+    }
      public Long getId() {
         return id;
     }
@@ -56,5 +59,16 @@ public class VampiroCriador extends Vampiro implements Serializable {
     @Override
     public String toString() {
         return nome; // ou getNome()
+    }
+    
+    public String exibirDados(){
+        // Define o mesmo formatador usado para a criação da string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String aux = "Vampiro cadastrada: \n";
+        aux += "Nome: " + nome + "\n";      // herdado de Vampiro
+        aux += "Clã: " + clan + "\n";       // herdado de Vampiro
+        aux += "Estado: " + estado + "\n";  // atributo da classe VampiroCriador
+
+    return aux;
     }
 }
