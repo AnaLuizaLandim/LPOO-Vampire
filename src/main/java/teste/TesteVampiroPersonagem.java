@@ -8,7 +8,6 @@ import model.Clan;
 import model.Estado;
 import model.PersonagemVamp;
 import model.VampiroCriador;
-import model.VantDesv;
 import model.dao.PersistenciaJPA;
 
 /**
@@ -25,11 +24,8 @@ public class TesteVampiroPersonagem {
             PersonagemVamp v = new PersonagemVamp();
             v.setNome("Trevore");
             v.setClan(Clan.BRUJA);
-            v.setCaracteristicas(VantDesv.ARCAICO);
-            v.setCaracteristicas(VantDesv.DESLUMBRANTE);
-            v.setCaracteristicas(VantDesv.LINGUISTICA_ADICIONAL);
+          
             v.setConceito("Professor de História");
-            v.setCronica("Criado nos anos 1980");
             try {
                 jpa.persist(v);
                 System.out.println("🚗 Vampiro Criador salvo no banco!");

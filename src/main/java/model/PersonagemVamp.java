@@ -51,9 +51,7 @@ public class PersonagemVamp extends Vampiro implements Serializable {
     @Column(name = "vamp_tppredador")
     private TPPredador predador;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "vamp_caracteristicas")
-    private VantDesv caracteristicas;
+   
 
     @Column(name = "vamp_cronica")
     private String cronica;
@@ -81,9 +79,7 @@ public class PersonagemVamp extends Vampiro implements Serializable {
         return predador;
     }
 
-    public VantDesv getCaracteristicas() {
-        return caracteristicas;
-    }
+   
 
     public String getCronica() {
         return cronica;
@@ -121,9 +117,7 @@ public class PersonagemVamp extends Vampiro implements Serializable {
         this.predador = predador;
     }
 
-    public void setCaracteristicas(VantDesv caracteristicas) {
-        this.caracteristicas = caracteristicas;
-    }
+    
 
     public void setCronica(String Cronica) {
         this.cronica = Cronica;

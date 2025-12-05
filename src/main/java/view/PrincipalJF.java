@@ -85,8 +85,8 @@ public class PrincipalJF extends javax.swing.JFrame {
     }//GEN-LAST:event_miPersonagemActionPerformed
 
     private void miHumanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miHumanoActionPerformed
-        ListaHumanoJF telaHumano = new ListaHumanoJF();
-        telaHumano.setVisible(true);
+        ListaHumanosJD telaHumano = new ListaHumanosJD();
+       telaHumano.setVisible(true);
     }//GEN-LAST:event_miHumanoActionPerformed
 
     private void miCriadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCriadorActionPerformed

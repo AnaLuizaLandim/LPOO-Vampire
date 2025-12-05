@@ -7,26 +7,42 @@ package view;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Humano;
-import model.VampiroCriador;
 import model.dao.HumanoDAO;
 
 /**
  *
  * @author @Ana
  */
-public class ListaHumanoJF extends javax.swing.JFrame {
+public class ListaHumanosJD extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaHumanoJF.class.getName());
-    HumanoDAO dao;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaHumanosJD.class.getName());
+ HumanoDAO dao;
     /**
      * Creates new form ListaVampiroJf
      */
-    public ListaHumanoJF() {
+    public ListaHumanosJD() {
         dao = new HumanoDAO();
         initComponents();
         loadTabelaHumanos();
     }
+    
+     public void loadTabelaHumanos() {
 
+        // Obtém o modelo da tabela - vincular o que definimos no Desing
+        // Obtém o modelo da tabela - vincular o que definimos no Desing
+        DefaultTableModel modelo = (DefaultTableModel) tblHumanos.getModel();
+        //limpar as linhas e popular 
+        modelo.setNumRows(0);
+
+        for (Humano obj : dao.listaHumanos()) {
+            Object[] linha = {
+                obj,
+                obj.getEstado()
+            };
+            modelo.addRow(linha);
+        }
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,13 +52,20 @@ public class ListaHumanoJF extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnNovo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHumanos = new javax.swing.JTable();
-        btnNovo = new javax.swing.JToggleButton();
         btnEditar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
         tblHumanos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -56,7 +79,7 @@ public class ListaHumanoJF extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true
+                true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -64,13 +87,6 @@ public class ListaHumanoJF extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tblHumanos);
-
-        btnNovo.setText("Novo");
-        btnNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoActionPerformed(evt);
-            }
-        });
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -91,54 +107,55 @@ public class ListaHumanoJF extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnNovo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRemover)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemover))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovo)
                     .addComponent(btnEditar)
                     .addComponent(btnRemover))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-    CadastroHumanoJD telaCadastro = new CadastroHumanoJD(this, true);
-    telaCadastro.setLocationRelativeTo(this);
-    telaCadastro.setVisible(true);
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+      if (tblHumanos.getSelectedRow() != -1) {
+            Humano obj = (Humano) tblHumanos.getModel().
+                    getValueAt(tblHumanos.getSelectedRow(), 0);
+            int op_remover = JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja remover " + obj + "?");
+            if (op_remover == JOptionPane.YES_OPTION) {
+                try {
+                    dao.remover(obj);
+                    JOptionPane.showMessageDialog(rootPane, "Criador removido com sucesso... ");
+                    loadTabelaHumanos();
+                } catch (Exception ex) {
+                    System.err.println("Erro ao remover Criador: " + ex);
+                }
+            }
 
-    Humano novo = telaCadastro.getHumano();
-
-    if (novo != null) {
-        try {
-            dao.persist(novo);
-            loadTabelaHumanos();
-        } catch (Exception ex) {
-            System.err.println("Erro ao adicionar Humano: " + ex);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione um cliente");
         }
-    }
-
-
-    }//GEN-LAST:event_btnNovoActionPerformed
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-      if (tblHumanos.getSelectedRow() != -1) {
+       if (tblHumanos.getSelectedRow() != -1) {
             Humano obj = (Humano) tblHumanos.getModel().
                     getValueAt(tblHumanos.getSelectedRow(), 0);
 
@@ -160,50 +177,29 @@ public class ListaHumanoJF extends javax.swing.JFrame {
             }
         }
        }
-
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-              if (tblHumanos.getSelectedRow() != -1) {
-            Humano obj = (Humano) tblHumanos.getModel().
-                    getValueAt(tblHumanos.getSelectedRow(), 0);
-            int op_remover = JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja remover " + obj + "?");
-            if (op_remover == JOptionPane.YES_OPTION) {
-                try {
-                    dao.remover(obj);
-                    JOptionPane.showMessageDialog(rootPane, "Criador removido com sucesso... ");
-                    loadTabelaHumanos();
-                } catch (Exception ex) {
-                    System.err.println("Erro ao remover Criador: " + ex);
-                }
-            }
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+      CadastroHumanoJD telaCadastro = new CadastroHumanoJD(this, true);
+    telaCadastro.setLocationRelativeTo(this);
+    telaCadastro.setVisible(true);
 
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um cliente");
+    Humano novo = telaCadastro.getHumano();
+
+    if (novo != null) {
+        try {
+            dao.persist(novo);
+            loadTabelaHumanos();
+        } catch (Exception ex) {
+            System.err.println("Erro ao adicionar Humano: " + ex);
         }
+    }
 
-    }//GEN-LAST:event_btnRemoverActionPerformed
+    }//GEN-LAST:event_btnNovoActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public void loadTabelaHumanos() {
-
-        // Obtém o modelo da tabela - vincular o que definimos no Desing
-        // Obtém o modelo da tabela - vincular o que definimos no Desing
-        DefaultTableModel modelo = (DefaultTableModel) tblHumanos.getModel();
-        //limpar as linhas e popular 
-        modelo.setNumRows(0);
-
-        for (Humano obj : dao.listaHumanos()) {
-            Object[] linha = {
-                obj,
-                obj.getEstado()
-            };
-            modelo.addRow(linha);
-        }
-
-    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -223,12 +219,12 @@ public class ListaHumanoJF extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ListaHumanoJF().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ListaHumanosJD().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
-    private javax.swing.JToggleButton btnNovo;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnRemover;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblHumanos;

@@ -6,7 +6,6 @@ package teste;
 
 import model.Estado;
 import model.Humano;
-import model.Ligacao;
 import model.dao.PersistenciaJPA;
 
 /**
