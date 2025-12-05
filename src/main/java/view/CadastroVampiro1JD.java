@@ -4,23 +4,46 @@
  */
 package view;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JOptionPane;
+import model.Clan;
+import model.Estado;
+import model.Humano;
+import model.PersonagemVamp;
 import model.TPPredador;
 import model.VampiroCriador;
+import model.dao.HumanoDAO;
+import model.dao.VampiroCriadorDAO;
 
 /**
  *
  * @author @Ana
  */
-public class CadastroVampiro1JD extends javax.swing.JFrame {
-    
+public class CadastroVampiro1JD extends javax.swing.JDialog {
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CadastroVampiro1JD.class.getName());
+    private PersonagemVamp personagem;
+    VampiroCriadorDAO daoCriador;
+    HumanoDAO daoHumano;
 
     /**
      * Creates new form CadastroVampiroJD
      */
-    public CadastroVampiro1JD() {
+    public CadastroVampiro1JD(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        daoCriador = new VampiroCriadorDAO();
+        daoHumano = new HumanoDAO();
+        loadCla();
+        loadCriador();
+        loadHumano();
+        loadPredador();
+
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,35 +54,31 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         lblCla = new javax.swing.JLabel();
         lblIdade = new javax.swing.JLabel();
-        txtCla = new javax.swing.JTextField();
         lblConceito = new javax.swing.JLabel();
         txtIdade = new javax.swing.JTextField();
         lblCriador = new javax.swing.JLabel();
         txtConceito = new javax.swing.JTextField();
         cmbCriador = new javax.swing.JComboBox<>();
-        btnInfoConceito = new javax.swing.JButton();
-        btnCriar = new javax.swing.JButton();
-        btnInfoCla = new javax.swing.JButton();
         lblPredador = new javax.swing.JLabel();
         cmbPredador = new javax.swing.JComboBox<>();
-        btnAvancar = new javax.swing.JButton();
-        btnInfoPredador = new javax.swing.JButton();
-        btnInfoCriador = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
         lblDisciplinas = new javax.swing.JLabel();
-        btnInfoDisciplinas = new javax.swing.JButton();
         lblDisciplina1 = new javax.swing.JLabel();
         lblDisciplina2 = new javax.swing.JLabel();
         lblDisciplina3 = new javax.swing.JLabel();
+        cmbCla = new javax.swing.JComboBox<>();
+        cmbHumano = new javax.swing.JComboBox<>();
+        lblHumano = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Showcard Gothic", 0, 36)); // NOI18N
-        jLabel1.setText("Cadastro de VAMPIRO");
+        lblTitulo.setFont(new java.awt.Font("Showcard Gothic", 0, 36)); // NOI18N
+        lblTitulo.setText("Cadastro de VAMPIRO");
 
         lblNome.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
         lblNome.setText("Nome:");
@@ -75,12 +94,6 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
 
         lblIdade.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
         lblIdade.setText("Idade:");
-
-        txtCla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtClaActionPerformed(evt);
-            }
-        });
 
         lblConceito.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
         lblConceito.setText("Conceito:");
@@ -100,40 +113,18 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
             }
         });
 
-        btnInfoConceito.setText("Info");
-
-        btnCriar.setText("Criar");
-
-        btnInfoCla.setText("Info");
-        btnInfoCla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInfoClaActionPerformed(evt);
-            }
-        });
-
         lblPredador.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
         lblPredador.setText("Tipo Predador:");
 
-        btnAvancar.setText("Avançar");
-
-        btnInfoPredador.setText("Info");
-        btnInfoPredador.addActionListener(new java.awt.event.ActionListener() {
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInfoPredadorActionPerformed(evt);
+                btnCadastrarActionPerformed(evt);
             }
         });
-
-        btnInfoCriador.setText("Info");
 
         lblDisciplinas.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
         lblDisciplinas.setText("Disciplinas:");
-
-        btnInfoDisciplinas.setText("Info");
-        btnInfoDisciplinas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInfoDisciplinasActionPerformed(evt);
-            }
-        });
 
         lblDisciplina1.setFont(new java.awt.Font("MS UI Gothic", 1, 14)); // NOI18N
         lblDisciplina1.setText("Sem Disciplina");
@@ -144,6 +135,15 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
         lblDisciplina3.setFont(new java.awt.Font("MS UI Gothic", 1, 14)); // NOI18N
         lblDisciplina3.setText("Sem Disciplina");
 
+        cmbCla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbClaActionPerformed(evt);
+            }
+        });
+
+        lblHumano.setFont(new java.awt.Font("MS UI Gothic", 1, 18)); // NOI18N
+        lblHumano.setText("Humano Conhecido:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,48 +152,41 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jLabel1))
+                        .addComponent(lblTitulo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblCla)
-                            .addComponent(lblNome)
-                            .addComponent(lblIdade)
-                            .addComponent(lblConceito)
-                            .addComponent(lblCriador)
-                            .addComponent(lblPredador)
-                            .addComponent(lblDisciplinas, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblCla)
+                                .addComponent(lblNome)
+                                .addComponent(lblIdade)
+                                .addComponent(lblConceito)
+                                .addComponent(lblCriador)
+                                .addComponent(lblPredador)
+                                .addComponent(lblDisciplinas, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(lblHumano))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAvancar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtNome)
-                            .addComponent(txtCla)
                             .addComponent(txtIdade)
                             .addComponent(txtConceito)
                             .addComponent(cmbCriador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbPredador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbCla, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblDisciplina1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblDisciplina2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblDisciplina3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnInfoCriador)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCriar))
-                            .addComponent(btnInfoCla)
-                            .addComponent(btnInfoPredador)
-                            .addComponent(btnInfoConceito)
-                            .addComponent(btnInfoDisciplinas))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(lblDisciplina2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblDisciplina3))
+                            .addComponent(cmbHumano, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(lblTitulo)
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNome)
@@ -201,8 +194,7 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCla)
-                    .addComponent(txtCla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInfoCla))
+                    .addComponent(cmbCla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblIdade)
@@ -210,28 +202,27 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblConceito)
-                    .addComponent(txtConceito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInfoConceito))
+                    .addComponent(txtConceito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCriador)
-                    .addComponent(cmbCriador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCriar)
-                    .addComponent(btnInfoCriador))
+                    .addComponent(cmbCriador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPredador)
-                    .addComponent(cmbPredador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInfoPredador))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cmbPredador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbHumano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHumano))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDisciplinas)
-                    .addComponent(btnInfoDisciplinas)
                     .addComponent(lblDisciplina1)
                     .addComponent(lblDisciplina2)
                     .addComponent(lblDisciplina3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAvancar)
+                .addGap(33, 33, 33)
+                .addComponent(btnCadastrar)
                 .addGap(21, 21, 21))
         );
 
@@ -242,10 +233,6 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
 
-    private void txtClaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtClaActionPerformed
-
     private void txtIdadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdadeActionPerformed
@@ -254,19 +241,96 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtConceitoActionPerformed
 
-    private void btnInfoPredadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoPredadorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInfoPredadorActionPerformed
+    private void cmbClaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClaActionPerformed
+       Clan clan = (Clan) cmbCla.getSelectedItem();
 
-    private void btnInfoClaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoClaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInfoClaActionPerformed
+    if (clan != null) {
+        lblDisciplina1.setText(clan.getDisciplina1());
+        lblDisciplina2.setText(clan.getDisciplina2());
+        lblDisciplina3.setText(clan.getDisciplina3());
+    }
+    }//GEN-LAST:event_cmbClaActionPerformed
 
-    private void btnInfoDisciplinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoDisciplinasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInfoDisciplinasActionPerformed
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        try {
+            if (personagem == null) {
+                personagem = new PersonagemVamp();
+            }
+
+            personagem.setNome(txtNome.getText());
+            personagem.setClan((Clan) cmbCla.getSelectedItem());
+            personagem.setIdade(Integer.parseInt(txtIdade.getText()));
+            personagem.setConceito(txtConceito.getText());
+            personagem.setCriador((VampiroCriador) cmbCriador.getSelectedItem());
+            personagem.setPredador((TPPredador) cmbPredador.getSelectedItem()); // se for enum ou objeto
+            personagem.setHumano((Humano) cmbHumano.getSelectedItem());
+
+            JOptionPane.showMessageDialog(this, "Cadastrado com sucesso!");
+            this.dispose();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocorreu um erro inesperado:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void loadCla() {
+        cmbCla.removeAllItems();
+//        for(Modelo obj: Modelo.values()){
+//            cmbModelo.addItem(obj);
+//        }
+        cmbCla.removeAllItems();
+
+        List<Clan> estados = new ArrayList<>(Arrays.asList(Clan.values()));
+
+        estados.forEach(e -> cmbCla.addItem(e));
+    }
+
+    public PersonagemVamp getPersonagem() {
+        return personagem;
+    }
+    
+    public void setPersonagem(PersonagemVamp personagem) {
+        this.personagem = personagem;
+        txtNome.setText(personagem.getNome());
+        cmbCla.setSelectedItem(personagem.getClan());
+        txtIdade.setText(String.valueOf(personagem.getIdade()));
+        txtConceito.setText(personagem.getConceito());
+        cmbCriador.setSelectedItem(personagem.getCriador());
+        cmbPredador.setSelectedItem(personagem.getPredador());
+        cmbHumano.setSelectedItem(personagem.getHumano());
+    }
+    private void loadPredador() {
+        cmbPredador.removeAllItems();
+//        for(Modelo obj: Modelo.values()){
+//            cmbModelo.addItem(obj);
+//        }
+        cmbPredador.removeAllItems();
+
+        List<TPPredador> estados = new ArrayList<>(Arrays.asList(TPPredador.values()));
+
+        estados.forEach(e -> cmbPredador.addItem(e));
+    }
+    
+    
+
+    public void loadCriador() {
+        for (VampiroCriador obj : daoCriador.listaVampirosCriadores()) {
+            cmbCriador.addItem(obj);
+        }
+    }
+
+    public void loadHumano() {
+        for (Humano obj : daoHumano.listaHumanos()) {
+            cmbHumano.addItem(obj);
+        }
+    }
 
     /**
+     * 1
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -288,20 +352,15 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CadastroVampiro1JD().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new CadastroVampiro1JD().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAvancar;
-    private javax.swing.JButton btnCriar;
-    private javax.swing.JButton btnInfoCla;
-    private javax.swing.JButton btnInfoConceito;
-    private javax.swing.JButton btnInfoCriador;
-    private javax.swing.JButton btnInfoDisciplinas;
-    private javax.swing.JButton btnInfoPredador;
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JComboBox<Clan> cmbCla;
     private javax.swing.JComboBox<VampiroCriador> cmbCriador;
+    private javax.swing.JComboBox<Humano> cmbHumano;
     private javax.swing.JComboBox<TPPredador> cmbPredador;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblCla;
     private javax.swing.JLabel lblConceito;
     private javax.swing.JLabel lblCriador;
@@ -309,10 +368,11 @@ public class CadastroVampiro1JD extends javax.swing.JFrame {
     private javax.swing.JLabel lblDisciplina2;
     private javax.swing.JLabel lblDisciplina3;
     private javax.swing.JLabel lblDisciplinas;
+    private javax.swing.JLabel lblHumano;
     private javax.swing.JLabel lblIdade;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblPredador;
-    private javax.swing.JTextField txtCla;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtConceito;
     private javax.swing.JTextField txtIdade;
     private javax.swing.JTextField txtNome;

@@ -35,21 +35,13 @@ public class Humano {
     @Column(name = "human_estado")
     private Estado estado;
     
-    @OneToMany(mappedBy = "humano")
-    private List<HumanoVinculo> vinculos;
-    
+   
     
     public Long getId() {
         return id;
     }
 
-    public void setVinculos(List<HumanoVinculo> vinculos) {
-        this.vinculos = vinculos;
-    }
-
-    public List<HumanoVinculo> getVinculos() {
-        return vinculos;
-    }
+ 
 
     public Humano() {}
 
@@ -80,10 +72,10 @@ public class Humano {
         return estado;
     }
 
-    public Humano(String nome, Estado estado, List<HumanoVinculo> vinculos) {
+    public Humano(String nome, Estado estado) {
         this.nome = nome;
         this.estado = estado;
-        this.vinculos = vinculos;
+       
     }
     
      @Override

@@ -12,20 +12,21 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.Estado;
 import model.Humano;
+import model.VampiroCriador;
 import model.dao.HumanoDAO;
 
 /**
  *
  * @author @Ana
  */
-public class CadastroHumanoJD extends javax.swing.JFrame {
+public class CadastroHumanoJD extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CadastroHumanoJD.class.getName());
     private Humano humano;
-    /**
-     * Creates new form CadastroHumanoJD
-     */
-    public CadastroHumanoJD() {
+    /**/
+    
+    public CadastroHumanoJD(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         loadEstado();
     }
@@ -46,7 +47,7 @@ public class CadastroHumanoJD extends javax.swing.JFrame {
         btnCadastrar = new javax.swing.JButton();
         cmbEstado = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Showcard Gothic", 0, 36)); // NOI18N
         jLabel1.setText("Cadastro de Humano");
@@ -167,6 +168,17 @@ public class CadastroHumanoJD extends javax.swing.JFrame {
     estados.remove(Estado.Desconhecido); // remove antes de popular
     estados.forEach(e -> cmbEstado.addItem(e));       
     }
+    
+     public void setHumano(Humano humano) {
+        this.humano = humano;
+        txtNome.setText(humano.getNome());
+        cmbEstado.setSelectedItem(humano.getEstado());
+
+    }
+     
+    public Humano getHumano() {
+        return humano;
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -185,7 +197,7 @@ public class CadastroHumanoJD extends javax.swing.JFrame {
         }
         //</editor-fold>
       
-        java.awt.EventQueue.invokeLater(() -> new CadastroHumanoJD().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new CadastroHumanoJD().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

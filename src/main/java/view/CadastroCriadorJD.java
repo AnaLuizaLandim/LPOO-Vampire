@@ -13,6 +13,7 @@ import model.Clan;
 import model.Estado;
 import model.Humano;
 import model.VampiroCriador;
+import model.dao.VampiroCriadorDAO;
 
 /**
  *
@@ -22,6 +23,7 @@ public class CadastroCriadorJD extends javax.swing.JDialog {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CadastroCriadorJD.class.getName());
     private VampiroCriador criador;
+   
 
     /**
      * Creates new form CadastroCriadorJD
@@ -29,6 +31,7 @@ public class CadastroCriadorJD extends javax.swing.JDialog {
     public CadastroCriadorJD(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+         
         loadEstado();
         loadCla();
     }

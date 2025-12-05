@@ -5,6 +5,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,37 +26,39 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Personagens")
-public class PersonagemVamp extends Vampiro implements Serializable{
+public class PersonagemVamp extends Vampiro implements Serializable {
+
     @Id
     @Column(name = "vamp_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    
-    @Column(name= "vamp_idade")
+
+    @Column(name = "vamp_idade")
     private int idade;
-    
-    @Column(name= "vamp_conceito")
+
+    @Column(name = "vamp_conceito")
     private String conceito;
-    
+
     @ManyToOne(optional = true)
-    @JoinColumn(name= "vamp_criador")
+    @JoinColumn(name = "vamp_criador")
     private VampiroCriador criador;
-    
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "vamp_humano")
+    private Humano humano;
+
     @Enumerated(EnumType.STRING)
-    @Column(name= "vamp_tppredador")
+    @Column(name = "vamp_tppredador")
     private TPPredador predador;
-    
-   @OneToMany(mappedBy = "vampiro")
-    private List<HumanoVinculo> humanosVinculados;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name= "vamp_caracteristicas")
+    @Column(name = "vamp_caracteristicas")
     private VantDesv caracteristicas;
-    
-    @Column(name= "vamp_cronica")
+
+    @Column(name = "vamp_cronica")
     private String cronica;
-    
-    @Column(name= "vamp_imagem")
+
+    @Column(name = "vamp_imagem")
     private byte[] imagem;
 
     public int getIdade() {
@@ -70,11 +73,13 @@ public class PersonagemVamp extends Vampiro implements Serializable{
         return criador;
     }
 
+    public Humano getHumano() {
+        return humano;
+    }
+
     public TPPredador getPredador() {
         return predador;
     }
-
-    
 
     public VantDesv getCaracteristicas() {
         return caracteristicas;
@@ -87,8 +92,7 @@ public class PersonagemVamp extends Vampiro implements Serializable{
     public byte[] getImagem() {
         return imagem;
     }
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -96,8 +100,6 @@ public class PersonagemVamp extends Vampiro implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
-
-    
 
     public void setIdade(int idade) {
         this.idade = idade;
@@ -111,19 +113,13 @@ public class PersonagemVamp extends Vampiro implements Serializable{
         this.criador = criador;
     }
 
+    public void setHumano(Humano humano) {
+        this.humano = humano;
+    }
+
     public void setPredador(TPPredador predador) {
         this.predador = predador;
     }
-
-    public List<HumanoVinculo> getHumanosVinculados() {
-        return humanosVinculados;
-    }
-
-    public void setHumanosVinculados(List<HumanoVinculo> humanosVinculados) {
-        this.humanosVinculados = humanosVinculados;
-    }
-
-    
 
     public void setCaracteristicas(VantDesv caracteristicas) {
         this.caracteristicas = caracteristicas;
@@ -137,7 +133,24 @@ public class PersonagemVamp extends Vampiro implements Serializable{
         this.imagem = imagem;
     }
 
-    public PersonagemVamp() {
+    @Override
+    public String toString() {
+        return this.nome; // ou getNome() dependendo de como está o atributo
     }
-    
+
+    public String exibirDados() {
+        // Define o mesmo formatador usado para a criação da string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String aux = "Vampiro cadastrada: \n";
+        aux += "Nome: " + nome + "\n";
+        aux += "Clã: " + clan + "\n";
+        aux += "Idade: " + idade + "\n";
+        aux += "Conceito: " + conceito + "\n";
+        aux += "Criador: " + criador + "\n";
+        aux += "Tipo de Predador: " + predador + "\n";
+        aux += "Humano conhecido: " + humano + "\n";
+
+        return aux;
+    }
+
 }
